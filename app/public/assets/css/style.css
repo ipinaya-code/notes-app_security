@@ -1,0 +1,126 @@
+/* ============================================================
+   style.css — estilos propios de la app de notas
+   Se apoya en Bootstrap (componentes) y Tailwind (utilidades)
+   cargados por CDN en templates/header.php
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500&display=swap');
+
+:root {
+    --brand-50:  #eef2ff;
+    --brand-100: #e0e7ff;
+    --brand-400: #818cf8;
+    --brand-500: #6366f1;
+    --brand-600: #4f46e5;
+    --brand-700: #4338ca;
+    --ink-900:   #1e1b4b;
+    --surface:   #ffffff;
+}
+
+* {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+h1, h2, h3, .brand-font {
+    font-family: 'Poppins', 'Inter', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--brand-50) 0%, #f5f3ff 45%, #fdf4ff 100%);
+    background-attachment: fixed;
+}
+
+/* ---------- Tarjetas ---------- */
+.app-card {
+    background: var(--surface);
+    border: 1px solid rgba(99, 102, 241, 0.08);
+    border-radius: 1rem;
+    box-shadow: 0 1px 2px rgba(30, 27, 75, 0.04), 0 8px 24px rgba(79, 70, 229, 0.08);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.app-card:hover {
+    box-shadow: 0 1px 2px rgba(30, 27, 75, 0.06), 0 14px 32px rgba(79, 70, 229, 0.14);
+}
+
+.note-card {
+    border-left: 4px solid var(--brand-500);
+}
+
+.note-card.removing {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* ---------- Login ---------- */
+.login-shell {
+    min-height: 100vh;
+}
+
+.login-badge {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--brand-500), var(--brand-700));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: 0 10px 20px rgba(79, 70, 229, 0.25);
+}
+
+.form-control:focus {
+    border-color: var(--brand-400);
+    box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.18);
+}
+
+/* Botón principal con degradado de marca */
+.btn-brand {
+    background: linear-gradient(135deg, var(--brand-500), var(--brand-700));
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    transition: filter 0.15s ease, transform 0.1s ease;
+}
+
+.btn-brand:hover {
+    filter: brightness(1.08);
+    color: #fff;
+}
+
+.btn-brand:active {
+    transform: translateY(1px);
+}
+
+/* Toggle de mostrar/ocultar contraseña */
+.password-toggle {
+    cursor: pointer;
+    user-select: none;
+}
+
+/* ---------- Navbar ---------- */
+.app-navbar {
+    backdrop-filter: blur(6px);
+    background: rgba(255, 255, 255, 0.85) !important;
+    border-bottom: 1px solid rgba(99, 102, 241, 0.08);
+}
+
+/* ---------- Animación de entrada ---------- */
+.fade-in-up {
+    animation: fadeInUp 0.35s ease both;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Scrollbar ligera ---------- */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-thumb {
+    background: var(--brand-100);
+    border-radius: 999px;
+}

@@ -1,0 +1,5 @@
+.env
+.env.*
+!.env.example
+/nginx/certs/selfsigned.key
+/nginx/certs/selfsigned.crt

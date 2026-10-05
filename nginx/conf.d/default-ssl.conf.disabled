@@ -1,0 +1,44 @@
+# ============================================================
+# FASE 2: HTTPS CON CERTIFICADO AUTOFIRMADO (puerto 443)
+# Para activar esta fase:
+#   1. Generar el certificado:  ./nginx/certs/generate-cert.sh
+#   2. Renombrar este archivo a "default-ssl.conf"
+#   3. docker compose restart nginx
+# Con esto, el tráfico capturado por Wireshark mostrará solo
+# datos cifrados (TLS Application Data), no las credenciales.
+# ============================================================
+server {
+    listen 443 ssl;
+    server_name _;
+    root /var/www/html;
+    index index.php;
+
+    ssl_certificate     /etc/nginx/certs/selfsigned.crt;
+    ssl_certificate_key /etc/nginx/certs/selfsigned.key;
+    ssl_protocols       TLSv1.2 TLSv1.3;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass notes_php:9000;
+        fastcgi_index index.php;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
+
+    location ~ /\. {
+        deny all;
+    }
+}
+
+# Opcional: redirigir todo el tráfico HTTP a HTTPS una vez
+# validada la fase 2 (descomentar y quitar el "location /" de
+# default.conf del puerto 80 si se desea forzar HTTPS):
+#
+# server {
+#     listen 80;
+#     server_name _;
+#     return 301 https://$host$request_uri;
+# }

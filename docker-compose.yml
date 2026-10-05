@@ -1,0 +1,58 @@
+version: "3.8"
+
+services:
+  db:
+    image: mariadb:10.11
+    container_name: notes_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: notesdb
+      MYSQL_USER: notesuser
+      MYSQL_PASSWORD: notespass
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - notes_net
+
+  php:
+    build:
+      context: ./app
+    container_name: notes_php
+    restart: unless-stopped
+    volumes:
+      - ./app/public:/var/www/html
+      - ./app/src:/var/www/src
+    environment:
+      DB_HOST: db
+      DB_NAME: notesdb
+      DB_USER: notesuser
+      DB_PASS: notespass
+    depends_on:
+      - db
+    networks:
+      - notes_net
+
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: notes_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"     # HTTP (fase 1: tráfico en texto plano)
+      - "443:443"   # HTTPS (fase 2: tráfico cifrado)
+    volumes:
+      - ./app/public:/var/www/html:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+    depends_on:
+      - php
+    networks:
+      - notes_net
+
+networks:
+  notes_net:
+    driver: bridge
+
+volumes:
+  db_data:
